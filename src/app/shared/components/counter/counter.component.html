@@ -1,0 +1,11 @@
+<div style="text-align: center">
+    <h2>Compteur : {{ count() }}</h2>
+    <p>Double : {{ doubleCount() }}</p>
+    <p>En toutes lettres : {{ countInWords() }}</p>
+    <p>Tick depuis l'ouverture (1s) : {{ tick() }}</p>
+  
+    <button (click)="increment()">+</button>
+    <button (click)="decrement()">-</button>
+    <button (click)="reset()">Reset</button>
+  </div>
+  
