@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-observable',
@@ -10,46 +9,77 @@ import { filter, map } from 'rxjs/operators';
   styleUrl: './observable.component.scss'
 })
 export class ObservableComponent implements OnInit, OnDestroy {
-  value = '';
-  tick = 0;
-  transformedTick = 0;
-  subscription?: Subscription;
-  transformedSub?: Subscription;
+  // Subject
+  subjectA = '';
+  subjectB = '';
+  private subject = new Subject<string>();
+  private subjectSubA?: Subscription;
+  private subjectSubB?: Subscription;
+
+  // BehaviorSubject
+  behaviorA = '';
+  behaviorB = '';
+  private behavior = new BehaviorSubject<string>('Valeur initiale');
+  private behaviorSubA?: Subscription;
+  private behaviorSubB?: Subscription;
+
+  // Observable
+  observableValue = '';
+  private simpleObservable!: Observable<string>;
+  private observableSub?: Subscription;
 
   ngOnInit(): void {
-    // Observable simple
-    const myObservable = new Observable<string>(observer => {
+    // ---------- Subject ----------
+    this.subjectSubA = this.subject.subscribe(v => {
+      this.subjectA = `A reçu : ${v}`;
+    });
+
+    setTimeout(() => {
+      this.subjectSubB = this.subject.subscribe(v => {
+        this.subjectB = `B reçu : ${v}`;
+      });
+    }, 3000);
+
+    // ---------- BehaviorSubject ----------
+    this.behaviorSubA = this.behavior.subscribe(v => {
+      this.behaviorA = `A reçu : ${v}`;
+    });
+
+    setTimeout(() => {
+      this.behaviorSubB = this.behavior.subscribe(v => {
+        this.behaviorB = `B reçu : ${v}`;
+      });
+    }, 3000);
+
+    // ---------- Observable ----------
+    this.simpleObservable = new Observable<string>(observer => {
       observer.next('Bonjour');
       observer.next('Wael');
       observer.next('👋');
       observer.complete();
     });
 
-    myObservable.subscribe({
-      next: val => this.value = val,
-      complete: () => console.log('Flux terminé ✅')
-    });
-
-    // Observable avec interval brut
-    const interval$ = interval(1000);
-
-    this.subscription = interval$.subscribe(val => {
-      this.tick = val;
-    });
-
-    // Observable avec filter + map
-    const transformed$ = interval$.pipe(
-      filter(val => val % 2 === 0),  // conserve les nombres pairs
-      map(val => val * 10)           // multiplie par 10
-    );
-
-    this.transformedSub = transformed$.subscribe(val => {
-      this.transformedTick = val;
+    this.observableSub = this.simpleObservable.subscribe({
+      next: v => this.observableValue = v,
+      complete: () => console.log('Observable terminé ✅')
     });
   }
 
+  emitSubject() {
+    const val = 'Subject ' + Math.floor(Math.random() * 100);
+    this.subject.next(val);
+  }
+
+  emitBehavior() {
+    const val = 'Behavior ' + Math.floor(Math.random() * 100);
+    this.behavior.next(val);
+  }
+
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-    this.transformedSub?.unsubscribe();
+    this.subjectSubA?.unsubscribe();
+    this.subjectSubB?.unsubscribe();
+    this.behaviorSubA?.unsubscribe();
+    this.behaviorSubB?.unsubscribe();
+    this.observableSub?.unsubscribe();
   }
 }

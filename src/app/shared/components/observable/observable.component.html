@@ -1,8 +1,16 @@
-<h2>Observable simple</h2>
-<p>Dernière valeur reçue : {{ value }}</p>
+<h2>1. Subject</h2>
+<p>Observer A : {{ subjectA }}</p>
+<p>Observer B : {{ subjectB }}</p>
+<button (click)="emitSubject()">Émettre vers Subject</button>
 
-<h2>Observable interval</h2>
-<p>Tick brut : {{ tick }}</p>
+<hr />
 
-<h2>Observable filtré et transformé</h2>
-<p>Tick pair x10 : {{ transformedTick }}</p>
+<h2>2. BehaviorSubject</h2>
+<p>Observer A : {{ behaviorA }}</p>
+<p>Observer B : {{ behaviorB }}</p>
+<button (click)="emitBehavior()">Émettre vers BehaviorSubject</button>
+
+<hr />
+
+<h2>3. Observable simple</h2>
+<p>Dernière valeur reçue : {{ observableValue }}</p>
