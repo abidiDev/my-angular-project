@@ -5,7 +5,7 @@ import { ThemeService, ThemePref } from '../../shared/theme/theme.service';
   standalone: true,
   selector: 'app-theme-toggle',
   templateUrl: './theme-toggle.component.html',
-  styleUrl: './theme-toggle.component.css'
+  styleUrl: './theme-toggle.component.scss'
 })
 export class ThemeToggleComponent implements OnInit {
   pref: ThemePref = 'system';
